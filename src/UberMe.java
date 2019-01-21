@@ -13,6 +13,7 @@ public class UberMe extends MIDlet {
   private boolean painting = false;
   private int state = -1;
   private String strText = "";
+  private String strAction = "";
   private static Image currentImage = null;
   private static Image splashImage = null;
   private static Image addressImage = null;
@@ -96,6 +97,8 @@ public class UberMe extends MIDlet {
       int hour = calendar.get(Calendar.HOUR); if (hour < 1) { hour += 12; }
       int minute = calendar.get(Calendar.MINUTE);
       String strTime = "" + hour + (minute < 10 ? ":0" : ":") + minute;
+      Font fontSm = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
+      Font fontLg = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
 
       if (state == -1) {
         currentImage = splashImage;
@@ -113,12 +116,22 @@ public class UberMe extends MIDlet {
         state = -1;
       } 
       g.drawImage(currentImage, 0, 0, Graphics.LEFT | Graphics.TOP);
-
       g.setColor(255, 255, 255);
       letterFont = openSansBold;
       letters(g, strText, 4, 4);
       letters(g, strTime, width - (strTime.length() * 12) + 2, 4);
-
+      g.setFont(fontSm);
+      if (state == 1) {
+        g.setColor(0x99ff99);
+        g.drawRect(width / 2 - 50, height - 25, 100, 25);
+        g.setColor(0xFFFFFF);
+        letters(g, "REQUEST", width / 2 - 44, height - 20);
+      }
+      if (state > -1) {
+        g.drawString("Menu", 4, height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
+        g.drawString("Back", width - 4 - fontSm.stringWidth("Back"),
+                                height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
+      }
       painting = false;
     }
 
