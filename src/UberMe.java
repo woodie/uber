@@ -88,7 +88,7 @@ public class UberMe extends MIDlet {
 
     public void keyPressed(int keyCode){
       vect.addElement(getKeyName(keyCode));
-      state += 1;
+      state = (state > 1) ? 0 : state + 1;
       this.repaint();
     }
 
@@ -113,21 +113,25 @@ public class UberMe extends MIDlet {
       } else {
         currentImage = enrouteImage;
         strText = "En Route";
-        state = -1;
       } 
       g.drawImage(currentImage, 0, 0, Graphics.LEFT | Graphics.TOP);
-      g.setColor(255, 255, 255);
+      g.setColor(0xFFFFFF);
       letterFont = openSansBold;
       letters(g, strText, 4, 4);
       letters(g, strTime, width - (strTime.length() * 12) + 2, 4);
       g.setFont(fontSm);
       if (state == 1) {
-        g.setColor(0x99ff99);
-        g.drawRect(width / 2 - 50, height - 25, 100, 25);
+        g.setColor(0x24c4e2); // pulsate when runnable
+        g.drawArc(width / 2 - 90, 95, 180, 180, 0, 365);
+        g.drawArc(width / 2 - 89, 96, 178, 178, 0, 365);
+        g.drawArc(width / 2 - 88, 97, 176, 176, 0, 365);
         g.setColor(0xFFFFFF);
-        letters(g, "REQUEST", width / 2 - 44, height - 20);
+        letters(g, "REQUEST", width / 2 - 44, height - 22);
+        g.setColor(0x99ff99);
+        g.drawRoundRect(width / 2 - 52, height - 27, 104, 26, 9, 9);
       }
       if (state > -1) {
+        g.setColor(0xFFFFFF);
         g.drawString("Menu", 4, height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
         g.drawString("Back", width - 4 - fontSm.stringWidth("Back"),
                                 height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
