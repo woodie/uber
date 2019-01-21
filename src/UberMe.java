@@ -3,17 +3,18 @@ import java.util.Vector;
 import javax.microedition.lcdui.*;
 import javax.microedition.midlet.*;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class UberMe extends MIDlet {
+public class UberMe extends MIDlet
+    implements CommandListener, ItemStateListener {
+
   private Display display = null;
   private FontCanvas fontCanvas = null;
   private boolean painting = false;
-  private int state = -1;
-  private String strText = "";
-  private String strAction = "";
   private static Image currentImage = null;
   private static Image splashImage = null;
   private static Image addressImage = null;
@@ -46,11 +47,26 @@ public class UberMe extends MIDlet {
   protected void destroyApp(boolean unconditional)
       throws MIDletStateChangeException {}
 
+  public void commandAction(Command c, Displayable d) {}
+
+  public void itemStateChanged(Item item) {}
+
   class FontCanvas extends Canvas {
+
+    private int state = -1;
+    private int circle_w = 180;
+    private int circle_min = 175;
+    private int circle_max = 185;
+    private int circle_direction = 1;
+    private String strText = "";
+    private String strAction = "";
     private Vector vect = new Vector();
     private UberMe parent = null;
     private int width;
     private int height;
+    protected Timer timer;
+    protected TimerTask updateTask;
+    static final int FRAME_DELAY = 60;
 
     public FontCanvas(UberMe parent) {
       this.parent = parent;
@@ -68,23 +84,65 @@ public class UberMe extends MIDlet {
       }
     }
 
+    public boolean animate() {
+      System.out.println("animate is called");
+      return (state == 1);
+    }
+
+    protected void showNotify() {
+      startFrameTimer();
+    }
+
+    protected void hideNotify() {
+      stopFrameTimer();
+    }
+
+    protected void startFrameTimer() {
+      timer = new Timer();
+      updateTask = new TimerTask() {
+        public void run() {
+          if (state == 1) {
+            moveCircle();
+          }
+          // TODO: update the the clock and other timers
+        }
+      };
+      long interval = FRAME_DELAY;
+      timer.schedule(updateTask, interval, interval);
+    }
+
+    protected void stopFrameTimer() {
+      timer.cancel();
+    }
+
+    // Called on expiry of timer.
+    public synchronized void moveCircle() {
+      circle_w += (1 * circle_direction);
+      if (circle_w <= circle_min) {
+        circle_direction = 1;
+      } else if (circle_w >= circle_max) {
+        circle_direction = -1;
+      }
+      repaint(15, 90, 200, 200);
+    }
+
     public void letters(Graphics g, String phrase, int fx, int fy) {
       for (int i = 0; i < phrase.length(); i++) {
-        int cw = 20; 
-        int ch = 22; 
+        int cw = 20;
+        int ch = 22;
         int ascii = ((int) phrase.charAt(i));
         if (ascii >= 32 && ascii <= 126) {
-          int cx = ((ascii - 32) / 8) * cw; 
-          int cy = ((ascii - 32) % 8) * ch; 
+          int cx = ((ascii - 32) / 8) * cw;
+          int cy = ((ascii - 32) % 8) * ch;
           cw = openSansMetrics[ascii - 32];
           g.setClip(fx, fy, cw, ch);
           g.fillRect(fx, fy, cw, ch);
           g.drawImage(letterFont, fx - cx, fy - cy, Graphics.LEFT | Graphics.TOP);
-          fx += cw; 
+          fx += cw;
           g.setClip(0 ,0, width, height);
-        }   
-      }   
-    }  
+        }
+      }
+    }
 
     public void keyPressed(int keyCode){
       vect.addElement(getKeyName(keyCode));
@@ -113,7 +171,7 @@ public class UberMe extends MIDlet {
       } else {
         currentImage = enrouteImage;
         strText = "En Route";
-      } 
+      }
       g.drawImage(currentImage, 0, 0, Graphics.LEFT | Graphics.TOP);
       g.setColor(0xFFFFFF);
       letterFont = openSansBold;
@@ -121,10 +179,14 @@ public class UberMe extends MIDlet {
       letters(g, strTime, width - (strTime.length() * 12) + 2, 4);
       g.setFont(fontSm);
       if (state == 1) {
-        g.setColor(0x24c4e2); // pulsate when runnable
-        g.drawArc(width / 2 - 90, 95, 180, 180, 0, 365);
-        g.drawArc(width / 2 - 89, 96, 178, 178, 0, 365);
-        g.drawArc(width / 2 - 88, 97, 176, 176, 0, 365);
+        g.setColor(0x24c4e2);
+        // put this in a for or while loop
+        int cx = width / 2 - (circle_w / 2);
+        int cy = 190 - (circle_w / 2); // Maybe use centerpoint
+        g.drawArc(cx + 0, cy + 0, circle_w - 0, circle_w, 0, 365);
+        g.drawArc(cx + 1, cy + 1, circle_w - 2, circle_w - 2, 0, 365);
+        g.drawArc(cx + 2, cy + 2, circle_w - 4, circle_w - 4, 0, 365);
+        // done drawing circle
         g.setColor(0xFFFFFF);
         letters(g, "REQUEST", width / 2 - 44, height - 22);
         g.setColor(0x99ff99);

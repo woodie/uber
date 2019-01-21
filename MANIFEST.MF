@@ -1,4 +1,4 @@
-MIDlet-1: UberMe, icon72x72.png, UberMe
+MIDlet-1: UberMe, , UberMe
 MIDlet-Name: Uber Me
 MIDlet-Vendor: Netpress.com
 MIDlet-Version: 0.1
