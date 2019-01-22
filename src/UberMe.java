@@ -14,11 +14,14 @@ public class UberMe extends MIDlet
 
   private Display display = null;
   private FontCanvas fontCanvas = null;
+  private final int padding = 4;
   private boolean painting = false;
+  private static Image pinImage = null;
   private static Image currentImage = null;
   private static Image splashImage = null;
   private static Image addressImage = null;
   private static Image requestImage = null;
+  private static Image requestingImage = null;
   private static Image enrouteImage = null;
   private static Image openSansBold = null;
   private static Image openSansLight = null;
@@ -68,6 +71,7 @@ public class UberMe extends MIDlet
     private int circle_max = 180;
     private int circle_pos = 190;
     private int circle_direction = 1;
+    private int progress_w = padding;
 
     public FontCanvas(UberMe parent) {
       this.parent = parent;
@@ -75,9 +79,11 @@ public class UberMe extends MIDlet
       width = getWidth();
       height = getHeight();
       try {
+        pinImage = Image.createImage ("/pin.png");
         splashImage = Image.createImage ("/splash.png");
         addressImage = Image.createImage ("/address.png");
         requestImage = Image.createImage ("/request.png");
+        requestingImage = Image.createImage ("/requesting.png");
         enrouteImage = Image.createImage ("/enroute.png");
         openSansBold = Image.createImage ("/sans-bold-20.png");
         openSansLight = Image.createImage ("/sans-light-20.png");
@@ -104,6 +110,8 @@ public class UberMe extends MIDlet
         public void run() {
           if (state == 1) {
             pulseCircle();
+          } else if (state == 2) {
+            showProgress();
           }
           //repaint clock
           repaint(width - 100, 0, 100, 20);
@@ -117,7 +125,6 @@ public class UberMe extends MIDlet
       timer.cancel();
     }
 
-    // Called on expiry of timer.
     public synchronized void pulseCircle() {
       circle_w += (1 * circle_direction);
       if (circle_w <= circle_min) {
@@ -126,6 +133,15 @@ public class UberMe extends MIDlet
         circle_direction = -1;
       }
       repaint(15, 90, 200, 200);
+    }
+
+    public synchronized void showProgress() {
+      if (progress_w < width - padding) {
+        progress_w++;
+        repaint(padding, 32, 2, progress_w);
+      } else {
+        progress_w = padding;
+      }
     }
 
     public void letters(Graphics g, String phrase, int fx, int fy) {
@@ -148,7 +164,7 @@ public class UberMe extends MIDlet
 
     public void keyPressed(int keyCode){
       vect.addElement(getKeyName(keyCode));
-      state = (state > 1) ? 0 : state + 1;
+      state = (state > 2) ? 0 : state + 1;
       this.repaint();
     }
 
@@ -171,6 +187,9 @@ public class UberMe extends MIDlet
       } else if (state == 1) {
         currentImage = requestImage;
         strText = "Request";
+      } else if (state == 2) {
+        currentImage = requestingImage;
+        strText = "Requesting...";
       } else {
         currentImage = enrouteImage;
         strText = "En Route";
@@ -189,14 +208,26 @@ public class UberMe extends MIDlet
           g.drawArc(cx + x, cy + x, circle_w - (2 * x), circle_w - (2 * x), 0, 365);
         }
         g.setColor(0xFFFFFF);
-        letters(g, "REQUEST", width / 2 - 44, height - 22);
-        g.setColor(0x99ff99);
-        g.drawRoundRect(width / 2 - 52, height - 27, 104, 26, 9, 9);
+        letters(g, "REQUEST", width / 2 - 44, height - 23);
+        g.setColor(0x99FF99);
+        g.drawRoundRect(width / 2 - 52, height - 28, 104, 27, 9, 9);
+      } else if (state == 2) {
+        g.setColor(0xFFFFFF);
+        letters(g, "CANCEL", width / 2 - 38, height - 23);
+        g.setColor(0xFF3333);
+        g.drawRoundRect(width / 2 - 52, height - 28, 104, 27, 9, 9);
+        g.setColor(0x99FF99);
+        g.setStrokeStyle(Graphics.DOTTED);
+        g.drawRect(padding, 32, progress_w, 1);
+        g.drawImage(pinImage, width / 2, height / 2, Graphics.HCENTER | Graphics.VCENTER);
       }
+      // For the enroute page, the timer has a 74px with black filled circle
+      // with a 64px wide blue stroked circle. There is a 5px wide blue circle
+      // with a 12px widhe black padding.
       if (state > -1) {
         g.setColor(0xFFFFFF);
-        g.drawString("Menu", 4, height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
-        g.drawString("Back", width - 4 - fontSm.stringWidth("Back"),
+        g.drawString("Menu", padding, height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
+        g.drawString("Back", width - padding - fontSm.stringWidth("Back"),
                                 height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
       }
       painting = false;

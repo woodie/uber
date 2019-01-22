@@ -6,4 +6,4 @@ MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
 MIDlet-Icon: icon72x72.png
 MIDlet-Jar-URL: UberMe.jar
-MIDlet-Jar-Size: 145822
+MIDlet-Jar-Size: 236307
