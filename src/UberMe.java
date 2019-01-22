@@ -9,6 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/*
+ * This is currently a mock to experiment with UI elements
+ * on the Nokia 3310 3G. The APIs to make it work are simple
+ * but we'll need to use 3rd party JSON librries, and doing
+ * OAuth on to get a user access token may be some work.
+ */
 public class UberMe extends MIDlet
     implements CommandListener, ItemStateListener {
 
@@ -136,7 +142,7 @@ public class UberMe extends MIDlet
     }
 
     public synchronized void showProgress() {
-      if (progress_w < width - padding) {
+      if (progress_w < width - (padding * 2)) {
         progress_w++;
         repaint(padding, 32, 2, progress_w);
       } else {
@@ -224,7 +230,9 @@ public class UberMe extends MIDlet
       // For the enroute page, the timer has a 74px with black filled circle
       // with a 64px wide blue stroked circle. There is a 5px wide blue circle
       // with a 12px widhe black padding.
-      if (state > -1) {
+
+      // No menus on Splash Screen or Requesting Page (which shoud be a modal dialog)
+      if (state != -1 && state != 2) {
         g.setColor(0xFFFFFF);
         g.drawString("Menu", padding, height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
         g.drawString("Back", width - padding - fontSm.stringWidth("Back"),
