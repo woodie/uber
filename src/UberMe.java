@@ -155,7 +155,7 @@ public class UberMe extends MIDlet
       int hour = calendar.get(Calendar.HOUR); if (hour < 1) { hour += 12; }
       int minute = calendar.get(Calendar.MINUTE);
       String strTime = "" + hour + (minute < 10 ? ":0" : ":") + minute;
-      Font fontSm = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
+      Font fontSm = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
       Font fontLg = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
 
       if (state == -1) {
