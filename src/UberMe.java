@@ -54,10 +54,6 @@ public class UberMe extends MIDlet
   class FontCanvas extends Canvas {
 
     private int state = -1;
-    private int circle_w = 180;
-    private int circle_min = 175;
-    private int circle_max = 185;
-    private int circle_direction = 1;
     private String strText = "";
     private String strAction = "";
     private Vector vect = new Vector();
@@ -66,7 +62,12 @@ public class UberMe extends MIDlet
     private int height;
     protected Timer timer;
     protected TimerTask updateTask;
-    static final int FRAME_DELAY = 60;
+    static final int FRAME_DELAY = 40;
+    private int circle_w = 170;
+    private int circle_min = 160;
+    private int circle_max = 180;
+    private int circle_pos = 190;
+    private int circle_direction = 1;
 
     public FontCanvas(UberMe parent) {
       this.parent = parent;
@@ -102,9 +103,10 @@ public class UberMe extends MIDlet
       updateTask = new TimerTask() {
         public void run() {
           if (state == 1) {
-            moveCircle();
+            pulseCircle();
           }
-          // TODO: update the the clock and other timers
+          //repaint clock
+          repaint(width - 100, 0, 100, 20);
         }
       };
       long interval = FRAME_DELAY;
@@ -116,7 +118,7 @@ public class UberMe extends MIDlet
     }
 
     // Called on expiry of timer.
-    public synchronized void moveCircle() {
+    public synchronized void pulseCircle() {
       circle_w += (1 * circle_direction);
       if (circle_w <= circle_min) {
         circle_direction = 1;
@@ -154,6 +156,7 @@ public class UberMe extends MIDlet
       calendar = Calendar.getInstance();
       int hour = calendar.get(Calendar.HOUR); if (hour < 1) { hour += 12; }
       int minute = calendar.get(Calendar.MINUTE);
+      int second = calendar.get(Calendar.SECOND);
       String strTime = "" + hour + (minute < 10 ? ":0" : ":") + minute;
       Font fontSm = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
       Font fontLg = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
@@ -179,14 +182,12 @@ public class UberMe extends MIDlet
       letters(g, strTime, width - (strTime.length() * 12) + 2, 4);
       g.setFont(fontSm);
       if (state == 1) {
-        g.setColor(0x24c4e2);
-        // put this in a for or while loop
         int cx = width / 2 - (circle_w / 2);
-        int cy = 190 - (circle_w / 2); // Maybe use centerpoint
-        g.drawArc(cx + 0, cy + 0, circle_w - 0, circle_w, 0, 365);
-        g.drawArc(cx + 1, cy + 1, circle_w - 2, circle_w - 2, 0, 365);
-        g.drawArc(cx + 2, cy + 2, circle_w - 4, circle_w - 4, 0, 365);
-        // done drawing circle
+        int cy = circle_pos - (circle_w / 2);
+        g.setColor(0x24c4e2);
+        for (int x = 0; x < 4; x++) {
+          g.drawArc(cx + x, cy + x, circle_w - (2 * x), circle_w - (2 * x), 0, 365);
+        }
         g.setColor(0xFFFFFF);
         letters(g, "REQUEST", width / 2 - 44, height - 22);
         g.setColor(0x99ff99);
