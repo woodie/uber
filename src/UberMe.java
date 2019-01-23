@@ -237,7 +237,7 @@ public class UberMe extends MIDlet
         g.setStrokeStyle(Graphics.DOTTED);
         g.drawRect(padding, 32, progress_w, 3);
         g.drawRect(padding, 33, progress_w - 2, 1);
-        g.drawImage(pinImage, width / 2, height / 2, Graphics.HCENTER | Graphics.BOTTOM);
+        g.drawImage(pinImage, width / 2, height / 2, Graphics.HCENTER | Graphics.VCENTER);
       }
       // For the enroute page, the timer has a 74px with black filled circle
       // with a 64px wide blue stroked circle. There is a 5px wide blue circle
