@@ -15,7 +15,7 @@ import java.util.TimeZone;
  * but we'll need to use 3rd party JSON librries, and doing
  * OAuth on to get a user access token may be some work.
  */
-public class UberMe extends MIDlet
+public class URideME extends MIDlet
     implements CommandListener, ItemStateListener {
 
   private Display display = null;
@@ -44,7 +44,7 @@ public class UberMe extends MIDlet
        9, 11, 13, 10, 12, 12,  9, 12, 12,  5,  5, 12,  5, 19, 12, 12,
       13, 12, 10, 10,  9, 13, 12, 17, 12, 12, 10,  9,  8,  9, 12,  8 };
 
-  public UberMe() {
+  public URideME() {
     display = Display.getDisplay(this);
     fontCanvas = new FontCanvas(this);
   }
@@ -68,7 +68,7 @@ public class UberMe extends MIDlet
     private String strText = "";
     private String strAction = "";
     private Vector vect = new Vector();
-    private UberMe parent = null;
+    private URideME parent = null;
     private int width;
     private int height;
     protected Timer timer;
@@ -80,7 +80,7 @@ public class UberMe extends MIDlet
     private int circle_direction = 1;
     private int progress_w = padding;
 
-    public FontCanvas(UberMe parent) {
+    public FontCanvas(URideME parent) {
       this.parent = parent;
       this.setFullScreenMode(true);
       width = getWidth();
@@ -214,6 +214,9 @@ public class UberMe extends MIDlet
       if (state == -1) {
         g.drawImage(logoImage, width / 2, height / 2 - 50, Graphics.VCENTER | Graphics.HCENTER);
         g.drawImage(brandingImage, width / 2, height / 2 + 50, Graphics.VCENTER | Graphics.HCENTER);
+        g.setColor(0xFFFFFF);
+        letterFont = openSansLight;
+        letters(g, "Ride Uber on J2ME", 28, height / 2 + 80);
       } else if (state == 1) {
         int cx = width / 2 - (circle_pos / 2);
         int cy = height / 2 - (circle_pos / 2);
@@ -223,6 +226,7 @@ public class UberMe extends MIDlet
         g.setColor(0x000000);
         g.fillArc(cx + w, cy + w, circle_pos - (2 * w), circle_pos - (2 * w), 0, 365);
         g.setColor(0xFFFFFF);
+        letterFont = openSansBold;
         letters(g, "REQUEST", width / 2 - 44, height - 23);
         g.setColor(0x99FF99);
         g.drawRoundRect(width / 2 - 52, height - 28, 104, 27, 9, 9);
@@ -230,6 +234,7 @@ public class UberMe extends MIDlet
       } else if (state == 2) {
         g.drawImage(knockoutImage, 0, 0, Graphics.LEFT | Graphics.TOP);
         g.setColor(0xFFFFFF);
+        letterFont = openSansBold;
         letters(g, "CANCEL", width / 2 - 38, height - 23);
         g.setColor(0xFF3333);
         g.drawRoundRect(width / 2 - 52, height - 28, 104, 27, 9, 9);

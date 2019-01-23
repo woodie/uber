@@ -1,5 +1,5 @@
-MIDlet-1: UberMe, , UberMe
-MIDlet-Name: Uber Me
+MIDlet-1: URideME, , URideME
+MIDlet-Name: URide ME
 MIDlet-Vendor: Netpress.com
 MIDlet-Version: 0.1
 MicroEdition-Configuration: CLDC-1.1

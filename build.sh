@@ -5,7 +5,7 @@ JME=/Applications/Java_ME_SDK_3.0.app/Contents/Resources
 CLDC_1_1=$JME/lib/cldc_1.1.jar
 MIDP_2_0=$JME/lib/midp_2.0.jar
  
-APP=UberMe
+APP=URideME
 rm -rf tmpclasses classes dist
 mkdir tmpclasses classes dist
 
