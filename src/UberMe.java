@@ -189,7 +189,7 @@ public class UberMe extends MIDlet
         strTime = "";
       } else if (state == 0) {
         backgroundImage = addressImage;
-        strText = "Uber Me";
+        strText = "Destination";
       } else if (state == 1) {
         backgroundImage = null;
         strText = "UberX";
@@ -235,7 +235,8 @@ public class UberMe extends MIDlet
         g.drawRoundRect(width / 2 - 52, height - 28, 104, 27, 9, 9);
         g.setColor(0x99FF99);
         g.setStrokeStyle(Graphics.DOTTED);
-        g.drawRect(padding, 32, progress_w, 1);
+        g.drawRect(padding, 32, progress_w, 3);
+        g.drawRect(padding, 33, progress_w - 2, 1);
         g.drawImage(pinImage, width / 2, height / 2, Graphics.HCENTER | Graphics.BOTTOM);
       }
       // For the enroute page, the timer has a 74px with black filled circle
