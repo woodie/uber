@@ -229,9 +229,6 @@ public class UberMe extends MIDlet
         g.drawImage(big2minImage, width / 2, height / 2, Graphics.VCENTER | Graphics.HCENTER);
       } else if (state == 2) {
         g.drawImage(knockoutImage, 0, 0, Graphics.LEFT | Graphics.TOP);
-        g.setColor(0x000000);
-        g.drawArc(width / 2 - 100 + 3, height / 2 - 100 + 3, circle_max - 6, circle_max - 6, 0, 365);
-        g.drawArc(width / 2 - 100 + 4, height / 2 - 100 + 4, circle_max - 8, circle_max - 8, 0, 365);
         g.setColor(0xFFFFFF);
         letters(g, "CANCEL", width / 2 - 38, height - 23);
         g.setColor(0xFF3333);
