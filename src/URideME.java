@@ -74,7 +74,7 @@ public class URideME extends MIDlet
     private int height;
     protected Timer timer;
     protected TimerTask updateTask;
-    static final int FAST_DELAY = 21;
+    static final int FRAME_DELAY = 40;
     private int circle_min = 180;
     private int circle_pos = 190;
     private int circle_max = 200;
@@ -130,7 +130,7 @@ public class URideME extends MIDlet
           repaint(width - 100, 0, 100, 20);
         }
       };
-      long interval = FAST_DELAY;
+      long interval = FRAME_DELAY;
       timer.schedule(updateTask, interval, interval);
     }
 
