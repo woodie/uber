@@ -74,7 +74,7 @@ public class URideME extends MIDlet
     private int height;
     protected Timer timer;
     protected TimerTask updateTask;
-    static final int FAST_DELAY = 14;
+    static final int FAST_DELAY = 21;
     private int circle_min = 180;
     private int circle_pos = 190;
     private int circle_max = 200;
@@ -149,7 +149,7 @@ public class URideME extends MIDlet
     }
 
     public synchronized void spinDown() {
-      spinner = (spinner < 6) ? 360 : spinner - 6;
+      spinner = (spinner < 9) ? 360 : spinner - 9;
       repaint(width / 2 - (74 / 2), 100 - (74 / 2), 74, 74);
     }
 
