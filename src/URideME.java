@@ -29,6 +29,7 @@ public class URideME extends MIDlet
   private static Image logoImage = null;
   private static Image brandingImage = null;
   private static Image addressImage = null;
+  private static Image big1minImage = null;
   private static Image big2minImage = null;
   private static Image enrouteImage = null;
   private static Image openSansBold = null;
@@ -73,12 +74,13 @@ public class URideME extends MIDlet
     private int height;
     protected Timer timer;
     protected TimerTask updateTask;
-    static final int FRAME_DELAY = 40;
-    private int circle_min = 170;
-    private int circle_pos = 185;
+    static final int FAST_DELAY = 14;
+    private int circle_min = 180;
+    private int circle_pos = 190;
     private int circle_max = 200;
     private int circle_direction = 1;
     private int progress_w = padding;
+    private int spinner = 360;
 
     public FontCanvas(URideME parent) {
       this.parent = parent;
@@ -92,6 +94,7 @@ public class URideME extends MIDlet
         logoImage = Image.createImage ("/icon72x72.png");
         brandingImage = Image.createImage ("/branding.png");
         addressImage = Image.createImage ("/address.png");
+        big1minImage = Image.createImage ("/big1min.png");
         big2minImage = Image.createImage ("/big2min.png");
         enrouteImage = Image.createImage ("/enroute.png");
         openSansBold = Image.createImage ("/sans-bold-20.png");
@@ -121,11 +124,13 @@ public class URideME extends MIDlet
             pulseCircle();
           } else if (state == 2) {
             showProgress();
+          } else if (state == 3) {
+            spinDown();
           }
           repaint(width - 100, 0, 100, 20);
         }
       };
-      long interval = FRAME_DELAY;
+      long interval = FAST_DELAY;
       timer.schedule(updateTask, interval, interval);
     }
 
@@ -141,6 +146,11 @@ public class URideME extends MIDlet
         circle_direction = -1;
       }
       repaint((width - circle_max) / 2, (height - circle_max) / 2, circle_max, circle_max);
+    }
+
+    public synchronized void spinDown() {
+      spinner = (spinner < 6) ? 360 : spinner - 6;
+      repaint(width / 2 - (74 / 2), 100 - (74 / 2), 74, 74);
     }
 
     public synchronized void showProgress() {
@@ -180,7 +190,7 @@ public class URideME extends MIDlet
       calendar = Calendar.getInstance();
       int hour = calendar.get(Calendar.HOUR); if (hour < 1) { hour += 12; }
       int minute = calendar.get(Calendar.MINUTE);
-      int second = calendar.get(Calendar.SECOND);
+      //int second = calendar.get(Calendar.SECOND);
       String strTime = "" + hour + (minute < 10 ? ":0" : ":") + minute;
       // Load some page defaults
       if (state == -1) {
@@ -243,15 +253,21 @@ public class URideME extends MIDlet
         g.drawRect(padding, 32, progress_w, 3);
         g.drawRect(padding, 33, progress_w - 2, 1);
         g.drawImage(pinImage, width / 2, height / 2, Graphics.HCENTER | Graphics.VCENTER);
+      } else if (state == 3) {
+        g.setColor(0x1F1F1F);
+        g.fillArc(width / 2 - (74 / 2), 100 - (74 / 2), 74, 74, 0, 365);
+        g.setColor(0x24c4e2);
+        g.fillArc(width / 2 - (64 / 2), 100 - (64 / 2), 63, 63, spinner - 15, 335);
+        g.setColor(0xFFFFFF);
+        g.fillArc(width / 2 - (66 / 2), 100 - (66 / 2), 66, 66, spinner - 30, 6);
+        g.setColor(0x1F1F1F);
+        g.fillArc(width / 2 - (62 / 2), 100 - (62 / 2), 62, 62, 0, 365);
+        g.drawImage(big1minImage, width / 2, 100, Graphics.VCENTER | Graphics.HCENTER);
       }
-      // For the enroute page, the timer has a 74px with black filled circle
-      // with a 64px wide blue stroked circle. There is a 5px wide blue circle
-      // with a 12px widhe black padding.
-
       // No menus on Splash Screen or Requesting Page (which shoud be a modal dialog)
       if (state != -1 && state != 2) {
-        g.setFont(fontSm);
         g.setColor(0xFFFFFF);
+        g.setFont(fontSm);
         g.drawString("Menu", padding, height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
         g.drawString("Back", width - padding - fontSm.stringWidth("Back"),
                                 height - fontSm.getHeight(), Graphics.LEFT | Graphics.TOP);
