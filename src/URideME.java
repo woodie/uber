@@ -256,12 +256,12 @@ public class URideME extends MIDlet
       } else if (state == 3) {
         g.setColor(0x1F1F1F);
         g.fillArc(width / 2 - (74 / 2), 100 - (74 / 2), 74, 74, 0, 365);
-        g.setColor(0x24c4e2);
-        g.fillArc(width / 2 - (64 / 2), 100 - (64 / 2), 63, 63, spinner - 15, 335);
         g.setColor(0xFFFFFF);
         g.fillArc(width / 2 - (66 / 2), 100 - (66 / 2), 66, 66, spinner - 30, 6);
         g.setColor(0x1F1F1F);
-        g.fillArc(width / 2 - (62 / 2), 100 - (62 / 2), 62, 62, 0, 365);
+        g.fillArc(width / 2 - (60 / 2), 100 - (60 / 2), 60, 60, 0, 365);
+        g.setColor(0x24c4e2);
+        g.drawArc(width / 2 - (64 / 2), 100 - (64 / 2), 64, 64, spinner - 15, 335);
         g.drawImage(big1minImage, width / 2, 100, Graphics.VCENTER | Graphics.HCENTER);
       }
       // No menus on Splash Screen or Requesting Page (which shoud be a modal dialog)
