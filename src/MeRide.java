@@ -15,7 +15,7 @@ import java.util.TimeZone;
  * but we'll need to use 3rd party JSON librries, and doing
  * OAuth on to get a user access token may be some work.
  */
-public class URideME extends MIDlet
+public class MeRide extends MIDlet
     implements CommandListener, ItemStateListener {
 
   private Display display = null;
@@ -45,7 +45,7 @@ public class URideME extends MIDlet
        9, 11, 13, 10, 12, 12,  9, 12, 12,  5,  5, 12,  5, 19, 12, 12,
       13, 12, 10, 10,  9, 13, 12, 17, 12, 12, 10,  9,  8,  9, 12,  8 };
 
-  public URideME() {
+  public MeRide() {
     display = Display.getDisplay(this);
     fontCanvas = new FontCanvas(this);
   }
@@ -69,7 +69,7 @@ public class URideME extends MIDlet
     private String strText = "";
     private String strAction = "";
     private Vector vect = new Vector();
-    private URideME parent = null;
+    private MeRide parent = null;
     private int width;
     private int height;
     protected Timer timer;
@@ -82,7 +82,7 @@ public class URideME extends MIDlet
     private int progress_w = padding;
     private int spinner = 360;
 
-    public FontCanvas(URideME parent) {
+    public FontCanvas(MeRide parent) {
       this.parent = parent;
       this.setFullScreenMode(true);
       width = getWidth();
@@ -91,7 +91,7 @@ public class URideME extends MIDlet
         pinImage = Image.createImage ("/pin.png");
         mapImage = Image.createImage ("/map.png");
         knockoutImage = Image.createImage ("/knockout.png");
-        logoImage = Image.createImage ("/icon72x72.png");
+        logoImage = Image.createImage ("/icon80x80.png");
         brandingImage = Image.createImage ("/branding.png");
         addressImage = Image.createImage ("/address.png");
         big1minImage = Image.createImage ("/big1min.png");
